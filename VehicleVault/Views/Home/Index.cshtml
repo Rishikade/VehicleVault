@@ -1,0 +1,47 @@
+﻿@model List<VehicleVault.Models.Vehicle>
+
+<h2>Vehicle List</h2>
+
+<a href="/Home/Create">Add New Vehicle</a>
+
+<br />
+<br />
+
+<table border="1" cellpadding="10">
+    <tr>
+        <th>Image</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Mileage</th>
+        <th>Engine</th>
+        <th>Fuel</th>
+        <th>Safety</th>
+        <th>Action</th>
+    </tr>
+
+    @foreach (var v in Model)
+    {
+        <tr>
+            <td>
+                @if (!string.IsNullOrEmpty(v.ImagePath))
+                {
+                    <img src="@v.ImagePath" width="120" height="80" />
+                }
+                else
+                {
+                    <span>No Image</span>
+                }
+            </td>
+            <td>@v.VehicleName</td>
+            <td>@v.Price</td>
+            <td>@v.Mileage</td>
+            <td>@v.Engine</td>
+            <td>@v.FuelType</td>
+            <td>@v.SafetyFeatures</td>
+            <td>
+                <a href="/Home/Edit/@v.VehicleID">Edit</a> |
+                <a href="/Home/Delete/@v.VehicleID">Delete</a>
+            </td>
+        </tr>
+    }
+</table>

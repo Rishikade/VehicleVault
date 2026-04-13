@@ -1,0 +1,29 @@
+﻿@model List<VehicleVault.Models.Vehicle>
+
+<h2>Compare Vehicles</h2>
+
+<form method="post" action="/Home/Compare">
+    
+    <label>Select Vehicle 1:</label>
+    <select name="id1">
+        @foreach (var v in Model)
+        {
+            <option value="@v.VehicleID">@v.VehicleName</option>
+        }
+    </select>
+
+    <br /><br />
+
+    <label>Select Vehicle 2:</label>
+    <select name="id2">
+        @foreach (var v in Model)
+        {
+            <option value="@v.VehicleID">@v.VehicleName</option>
+        }
+    </select>
+
+    <br /><br />
+
+    <button type="submit">Compare</button>
+
+</form>

@@ -1,0 +1,93 @@
+﻿@{
+    var v1 = ViewBag.V1;
+    var v2 = ViewBag.V2;
+    int s1 = ViewBag.Score1;
+    int s2 = ViewBag.Score2;
+}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container mt-4">
+    <div class="card p-4 shadow">
+
+        <h2>🚗 Comparison Result</h2>
+
+        <table class="table table-dark table-bordered text-center">
+            <tr>
+                <th>Feature</th>
+                <th>@v1.VehicleName</th>
+                <th>@v2.VehicleName</th>
+            </tr>
+
+            <tr>
+                <td>Price</td>
+                <td>@v1.Price</td>
+                <td>@v2.Price</td>
+            </tr>
+
+            <tr>
+                <td>Mileage</td>
+                <td>@v1.Mileage</td>
+                <td>@v2.Mileage</td>
+            </tr>
+
+            <tr>
+                <td>Safety</td>
+                <td>@v1.SafetyFeatures</td>
+                <td>@v2.SafetyFeatures</td>
+            </tr>
+        </table>
+
+        <hr />
+
+        <h3>📊 Score</h3>
+
+        <p>@v1.VehicleName: <b>@s1</b></p>
+        <p>@v2.VehicleName: <b>@s2</b></p>
+
+        <hr />
+
+        <h3>🏆 Winner:</h3>
+
+        @if (s1 > s2)
+        {
+            <h4 class="text-success">@v1.VehicleName is better</h4>
+        }
+        else if (s2 > s1)
+        {
+            <h4 class="text-success">@v2.VehicleName is better</h4>
+        }
+        else
+        {
+            <h4 class="text-warning">Both are equal</h4>
+        }
+
+        <hr />
+
+        <h3>📈 Graph Comparison</h3>
+
+        <canvas id="myChart" width="400" height="200"></canvas>
+
+    </div>
+</div>
+
+<script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+
+    var chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+    labels: ['Price', 'Mileage'],
+    datasets: [
+    {
+    label: '@v1.VehicleName',
+    data: [@v1.Price, @v1.Mileage]
+    },
+    {
+    label: '@v2.VehicleName',
+    data: [@v2.Price, @v2.Mileage]
+    }
+    ]
+    }
+    });
+</script>
