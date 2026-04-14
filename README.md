@@ -40,8 +40,14 @@ A web application to manage and compare vehicles with smart features.
 - Better UI animations
 - AI-based recommendations
 
----
 
+---
+## Architecture
+
+- Frontend: Razor Views (ASP.NET MVC)
+- Backend: ASP.NET Core Controllers + Entity Framework
+  
+---
 ## 👩‍💻 Author
 
 Rishika De
