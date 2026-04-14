@@ -23,14 +23,6 @@ A web application to manage and compare vehicles with smart features.
 
 ---
 
-## 📸 Screenshots
-
-### 🔹 Vehicle List
-![Vehicle List](https://via.placeholder.com/600x300)
-
-### 🔹 Compare Feature
-![Compare](https://via.placeholder.com/600x300)
-
 ---
 
 ## 🚀 How to Run
