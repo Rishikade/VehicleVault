@@ -1,12 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace VehicleVault.Models
+﻿namespace VehicleVault.Models
 {
     public class Vehicle
     {
-        public int VehicleID { get; set; }
+        public int Id { get; set; }
 
-        public string VehicleName { get; set; }
+        public string Name { get; set; }
 
         public int Price { get; set; }
 
@@ -14,10 +12,8 @@ namespace VehicleVault.Models
 
         public string Engine { get; set; }
 
-        public string FuelType { get; set; }
+        public string Fuel { get; set; }
 
-        public string SafetyFeatures { get; set; }
-
-        public string ImagePath { get; set; } // 👈 NEW
+        public string Safety { get; set; }
     }
 }

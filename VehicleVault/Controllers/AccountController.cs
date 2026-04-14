@@ -14,29 +14,20 @@ namespace VehicleVault.Controllers
             _context = context;
         }
 
-        public IActionResult Register()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult Register(User u)
-        {
-            _context.Users.Add(u);
-            _context.SaveChanges();
-            return RedirectToAction("Login");
-        }
-
+        // 🔹 LOGIN GET
         public IActionResult Login()
         {
             return View();
         }
 
+        // 🔹 LOGIN POST
         [HttpPost]
-        public IActionResult Login(User u)
+        public IActionResult Login(string username, string password)
         {
             var user = _context.Users
-                .FirstOrDefault(x => x.Username == u.Username && x.Password == u.Password);
+                .FirstOrDefault(x =>
+                    x.Username.Trim().ToLower() == username.Trim().ToLower() &&
+                    x.Password.Trim() == password.Trim());
 
             if (user != null)
             {
@@ -48,6 +39,23 @@ namespace VehicleVault.Controllers
             return View();
         }
 
+        // 🔹 REGISTER GET
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        // 🔹 REGISTER POST
+        [HttpPost]
+        public IActionResult Register(User u)
+        {
+            _context.Users.Add(u);
+            _context.SaveChanges();
+
+            return RedirectToAction("Login");
+        }
+
+        // 🔹 LOGOUT
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();

@@ -8,46 +8,37 @@ namespace VehicleVault.Controllers
     public class HomeController : Controller
     {
         private readonly AppDbContext _context;
-        private readonly IWebHostEnvironment _env;
 
-        public HomeController(AppDbContext context, IWebHostEnvironment env)
+        public HomeController(AppDbContext context)
         {
             _context = context;
-            _env = env;
         }
 
+        // 🔹 LIST
         public IActionResult Index()
         {
-            return View(_context.Vehicles.ToList());
+            if (HttpContext.Session.GetString("user") == null)
+                return RedirectToAction("Login", "Account");
+
+            var vehicles = _context.Vehicles.ToList();
+            return View(vehicles);
         }
 
+        // 🔹 CREATE GET
         public IActionResult Create()
         {
+            if (HttpContext.Session.GetString("user") == null)
+                return RedirectToAction("Login", "Account");
+
             return View();
         }
 
+        // 🔹 CREATE POST
         [HttpPost]
-        public IActionResult Create(Vehicle v, IFormFile imageFile)
+        public IActionResult Create(Vehicle v)
         {
-            if (imageFile != null)
-            {
-                string folder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
-
-                if (!Directory.Exists(folder))
-                {
-                    Directory.CreateDirectory(folder);
-                }
-
-                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
-                string filePath = Path.Combine(folder, fileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    imageFile.CopyTo(stream);
-                }
-
-                v.ImagePath = "/images/" + fileName;
-            }
+            if (HttpContext.Session.GetString("user") == null)
+                return RedirectToAction("Login", "Account");
 
             _context.Vehicles.Add(v);
             _context.SaveChanges();
@@ -55,45 +46,77 @@ namespace VehicleVault.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Edit(int id)
+        // 🔹 DELETE
+        public IActionResult Delete(int id)
         {
-            return View(_context.Vehicles.Find(id));
-        }
+            if (HttpContext.Session.GetString("user") == null)
+                return RedirectToAction("Login", "Account");
 
-        [HttpPost]
-        public IActionResult Edit(Vehicle v, IFormFile imageFile)
-        {
-            if (imageFile != null)
+            var vehicle = _context.Vehicles.Find(id);
+            if (vehicle != null)
             {
-                string folder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
-
-                if (!Directory.Exists(folder))
-                {
-                    Directory.CreateDirectory(folder);
-                }
-
-                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
-                string filePath = Path.Combine(folder, fileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    imageFile.CopyTo(stream);
-                }
-
-                v.ImagePath = "/images/" + fileName;
+                _context.Vehicles.Remove(vehicle);
+                _context.SaveChanges();
             }
-
-            _context.Vehicles.Update(v);
-            _context.SaveChanges();
 
             return RedirectToAction("Index");
         }
 
-        public IActionResult Delete(int id)
+        // 🔹 EDIT GET
+        public IActionResult Edit(int id)
         {
-            var v = _context.Vehicles.Find(id);
-            _context.Vehicles.Remove(v);
+            if (HttpContext.Session.GetString("user") == null)
+                return RedirectToAction("Login", "Account");
+
+            var vehicle = _context.Vehicles.Find(id);
+            return View(vehicle);
+        }
+
+        [HttpPost]
+        public IActionResult Login(string username, string password)
+        {
+            var user = _context.Users
+                .FirstOrDefault(x => x.Username == username && x.Password == password);
+
+            if (user != null)
+            {
+                HttpContext.Session.SetString("user", user.Username);
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewBag.Error = "Invalid login";
+            return View();
+        }
+
+        // COMPARE PAGE
+        public IActionResult Compare()
+        {
+            var vehicles = _context.Vehicles.ToList();
+            return View(vehicles);
+        }
+
+        // COMPARE RESULT
+        [HttpPost]
+        public IActionResult Compare(int id1, int id2)
+        {
+            var v1 = _context.Vehicles.Find(id1);
+            var v2 = _context.Vehicles.Find(id2);
+
+            ViewBag.V1 = v1;
+            ViewBag.V2 = v2;
+
+            return View("CompareResult");
+        }
+        // 🔹 EDIT POST
+        [HttpPost]
+        public IActionResult Edit(Vehicle v)
+        {
+            if (HttpContext.Session.GetString("user") == null)
+                return RedirectToAction("Login", "Account");
+
+            _context.Vehicles.Update(v);
             _context.SaveChanges();
+
             return RedirectToAction("Index");
         }
     }

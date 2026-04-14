@@ -3,14 +3,25 @@
 <h2>Edit Vehicle</h2>
 
 <form method="post">
-    <input type="hidden" name="VehicleID" value="@Model.VehicleID" />
+    <input type="hidden" asp-for="Id" />
 
-    <input type="text" name="VehicleName" value="@Model.VehicleName" /><br />
-    <input type="number" name="Price" value="@Model.Price" /><br />
-    <input type="number" name="Mileage" value="@Model.Mileage" /><br />
-    <input type="text" name="Engine" value="@Model.Engine" /><br />
-    <input type="text" name="FuelType" value="@Model.FuelType" /><br />
-    <input type="text" name="SafetyFeatures" value="@Model.SafetyFeatures" /><br />
+    <label>Name</label><br />
+    <input asp-for="Name" /><br />
+
+    <label>Price</label><br />
+    <input asp-for="Price" /><br />
+
+    <label>Mileage</label><br />
+    <input asp-for="Mileage" /><br />
+
+    <label>Engine</label><br />
+    <input asp-for="Engine" /><br />
+
+    <label>Fuel</label><br />
+    <input asp-for="Fuel" /><br />
+
+    <label>Safety</label><br />
+    <input asp-for="Safety" /><br /><br />
 
     <button type="submit">Update</button>
 </form>

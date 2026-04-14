@@ -1,47 +1,27 @@
 ﻿@model List<VehicleVault.Models.Vehicle>
 
-<h2>Vehicle List</h2>
+<h2 style="text-align:center;">🚗 Vehicle Vault</h2>
 
-<a href="/Home/Create">Add New Vehicle</a>
+<div style="text-align:center; margin-bottom:20px;">
+    <a href="/Home/Create">➕ Add Vehicle</a>
+</div>
 
-<br />
-<br />
-
-<table border="1" cellpadding="10">
-    <tr>
-        <th>Image</th>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Mileage</th>
-        <th>Engine</th>
-        <th>Fuel</th>
-        <th>Safety</th>
-        <th>Action</th>
-    </tr>
+<div style="display:flex; gap:20px; justify-content:center; flex-wrap:wrap;">
 
     @foreach (var v in Model)
     {
-        <tr>
-            <td>
-                @if (!string.IsNullOrEmpty(v.ImagePath))
-                {
-                    <img src="@v.ImagePath" width="120" height="80" />
-                }
-                else
-                {
-                    <span>No Image</span>
-                }
-            </td>
-            <td>@v.VehicleName</td>
-            <td>@v.Price</td>
-            <td>@v.Mileage</td>
-            <td>@v.Engine</td>
-            <td>@v.FuelType</td>
-            <td>@v.SafetyFeatures</td>
-            <td>
-                <a href="/Home/Edit/@v.VehicleID">Edit</a> |
-                <a href="/Home/Delete/@v.VehicleID">Delete</a>
-            </td>
-        </tr>
+        <div style="width:250px; padding:15px; border-radius:10px; background:#1e293b; color:white; text-align:center; box-shadow:0 0 10px rgba(0,0,0,0.5);">
+
+            <h3>@v.Name</h3>
+            <p>💰 ₹@v.Price</p>
+            <p>⛽ @v.Mileage km/l</p>
+            <p>⚙️ @v.Engine</p>
+            <p>🛢️ @v.Fuel</p>
+            <p>🛡️ @v.Safety</p>
+
+            <a href="/Home/Edit/@v.Id">Edit</a> |
+            <a href="/Home/Delete/@v.Id">Delete</a>
+        </div>
     }
-</table>
+
+</div>

@@ -1,30 +1,28 @@
-using VehicleVault.Data;
 using Microsoft.EntityFrameworkCore;
+using VehicleVault.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services
+builder.Services.AddControllersWithViews();
+
+// Add DB Context
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddControllersWithViews();
-
+// Add Session
 builder.Services.AddSession();
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-}
-
-app.UseHttpsRedirection();
+// Middleware
+app.UseStaticFiles();
 app.UseRouting();
 
+// Enable Session
 app.UseSession();
 
-app.UseAuthorization();
-
+// Default route → Login page first
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");

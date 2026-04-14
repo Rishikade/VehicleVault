@@ -1,14 +1,16 @@
-﻿<h2>Add Vehicle</h2>
+﻿@model VehicleVault.Models.Vehicle
 
-<form method="post" enctype="multipart/form-data">
-    <input name="VehicleName" placeholder="Name" /><br />
-    <input name="Price" placeholder="Price" /><br />
-    <input name="Mileage" placeholder="Mileage" /><br />
-    <input name="Engine" placeholder="Engine" /><br />
-    <input name="FuelType" placeholder="Fuel Type" /><br />
-    <input name="SafetyFeatures" placeholder="Safety Features" /><br />
+<h2>Add Vehicle</h2>
 
-    <input type="file" name="imageFile" /><br />
+<form method="post">
+
+    <input asp-for="Name" placeholder="Name" /><br />
+    <input asp-for="Price" placeholder="Price" /><br />
+    <input asp-for="Mileage" placeholder="Mileage" /><br />
+    <input asp-for="Engine" placeholder="Engine" /><br />
+    <input asp-for="Fuel" placeholder="Fuel" /><br />
+    <input asp-for="Safety" placeholder="Safety" /><br />
 
     <button type="submit">Save</button>
+
 </form>

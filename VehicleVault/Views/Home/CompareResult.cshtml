@@ -1,93 +1,92 @@
 ﻿@{
     var v1 = ViewBag.V1;
     var v2 = ViewBag.V2;
-    int s1 = ViewBag.Score1;
-    int s2 = ViewBag.Score2;
+
+    int score1 = 0;
+    int score2 = 0;
+
+    if (v1 != null && v2 != null)
+    {
+        // Price (LOW better)
+        if (v1.Price < v2.Price) score1++;
+        else if (v2.Price < v1.Price) score2++;
+
+        // Mileage (HIGH better)
+        if (v1.Mileage > v2.Mileage) score1++;
+        else if (v2.Mileage > v1.Mileage) score2++;
+
+        // Engine (HIGH better - extract number)
+        int e1 = int.Parse(v1.Engine.Replace("cc", ""));
+        int e2 = int.Parse(v2.Engine.Replace("cc", ""));
+
+        if (e1 > e2) score1++;
+        else if (e2 > e1) score2++;
+    }
 }
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<h2 style="text-align:center; color:white;">⚔️ Comparison Result</h2>
 
-<div class="container mt-4">
-    <div class="card p-4 shadow">
+@if (v1 != null && v2 != null)
+{
+    <div style="display:flex; justify-content:center; gap:30px; margin-top:30px;">
 
-        <h2>🚗 Comparison Result</h2>
+        <!-- Vehicle 1 -->
+        <div style="width:250px; padding:20px; border-radius:12px;
+            background:@(score1 > score2 ? "#14532d" : "#1e293b");
+            color:white; text-align:center; box-shadow:0 0 15px rgba(0,0,0,0.5);">
 
-        <table class="table table-dark table-bordered text-center">
-            <tr>
-                <th>Feature</th>
-                <th>@v1.VehicleName</th>
-                <th>@v2.VehicleName</th>
-            </tr>
+            <h3>@v1.Name</h3>
+            <p>💰 ₹@v1.Price</p>
+            <p>⛽ @v1.Mileage km/l</p>
+            <p>⚙️ @v1.Engine</p>
+            <p>🛢️ @v1.Fuel</p>
+            <p>🛡️ @v1.Safety</p>
 
-            <tr>
-                <td>Price</td>
-                <td>@v1.Price</td>
-                <td>@v2.Price</td>
-            </tr>
+            @if (score1 > score2)
+            {
+                <p style="color:#22c55e; font-weight:bold;">🏆 Winner</p>
+            }
+        </div>
 
-            <tr>
-                <td>Mileage</td>
-                <td>@v1.Mileage</td>
-                <td>@v2.Mileage</td>
-            </tr>
+        <!-- Vehicle 2 -->
+        <div style="width:250px; padding:20px; border-radius:12px;
+            background:@(score2 > score1 ? "#14532d" : "#1e293b");
+            color:white; text-align:center; box-shadow:0 0 15px rgba(0,0,0,0.5);">
 
-            <tr>
-                <td>Safety</td>
-                <td>@v1.SafetyFeatures</td>
-                <td>@v2.SafetyFeatures</td>
-            </tr>
-        </table>
+            <h3>@v2.Name</h3>
+            <p>💰 ₹@v2.Price</p>
+            <p>⛽ @v2.Mileage km/l</p>
+            <p>⚙️ @v2.Engine</p>
+            <p>🛢️ @v2.Fuel</p>
+            <p>🛡️ @v2.Safety</p>
 
-        <hr />
+            @if (score2 > score1)
+            {
+                <p style="color:#22c55e; font-weight:bold;">🏆 Winner</p>
+            }
+        </div>
 
-        <h3>📊 Score</h3>
+    </div>
 
-        <p>@v1.VehicleName: <b>@s1</b></p>
-        <p>@v2.VehicleName: <b>@s2</b></p>
+    <!-- RESULT TEXT -->
+    <div style="text-align:center; margin-top:30px; color:white;">
 
-        <hr />
-
-        <h3>🏆 Winner:</h3>
-
-        @if (s1 > s2)
+        @if (score1 > score2)
         {
-            <h4 class="text-success">@v1.VehicleName is better</h4>
+            <h3 style="color:#22c55e;">🔥 @v1.Name is Best Overall</h3>
         }
-        else if (s2 > s1)
+        else if (score2 > score1)
         {
-            <h4 class="text-success">@v2.VehicleName is better</h4>
+            <h3 style="color:#22c55e;">🔥 @v2.Name is Best Overall</h3>
         }
         else
         {
-            <h4 class="text-warning">Both are equal</h4>
+            <h3 style="color:#facc15;">⚖️ Both are Equal</h3>
         }
 
-        <hr />
-
-        <h3>📈 Graph Comparison</h3>
-
-        <canvas id="myChart" width="400" height="200"></canvas>
-
     </div>
-</div>
-
-<script>
-    var ctx = document.getElementById('myChart').getContext('2d');
-
-    var chart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-    labels: ['Price', 'Mileage'],
-    datasets: [
-    {
-    label: '@v1.VehicleName',
-    data: [@v1.Price, @v1.Mileage]
-    },
-    {
-    label: '@v2.VehicleName',
-    data: [@v2.Price, @v2.Mileage]
-    }
-    ]
-    }
-    });
-</script>
+}
+else
+{
+    <h3 style="text-align:center; color:white;">Select both vehicles 😅</h3>
+}

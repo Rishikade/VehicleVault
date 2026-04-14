@@ -11,8 +11,8 @@ using VehicleVault.Data;
 namespace VehicleVault.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260413115902_AddImage")]
-    partial class AddImage
+    [Migration("20260414105227_ResetAll123")]
+    partial class ResetAll123
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,17 +47,17 @@ namespace VehicleVault.Migrations
 
             modelBuilder.Entity("VehicleVault.Models.Vehicle", b =>
                 {
-                    b.Property<int>("VehicleID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VehicleID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Engine")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FuelType")
+                    b.Property<string>("Fuel")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -68,18 +68,18 @@ namespace VehicleVault.Migrations
                     b.Property<int>("Mileage")
                         .HasColumnType("int");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
-                    b.Property<string>("SafetyFeatures")
+                    b.Property<string>("Safety")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("VehicleName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("VehicleID");
+                    b.HasKey("Id");
 
                     b.ToTable("Vehicles");
                 });
