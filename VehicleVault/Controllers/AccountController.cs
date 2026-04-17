@@ -14,20 +14,18 @@ namespace VehicleVault.Controllers
             _context = context;
         }
 
-        // 🔹 LOGIN GET
+        // LOGIN PAGE
         public IActionResult Login()
         {
             return View();
         }
 
-        // 🔹 LOGIN POST
+        // LOGIN POST
         [HttpPost]
-        public IActionResult Login(string username, string password)
+        public IActionResult Login(string Username, string Password)
         {
             var user = _context.Users
-                .FirstOrDefault(x =>
-                    x.Username.Trim().ToLower() == username.Trim().ToLower() &&
-                    x.Password.Trim() == password.Trim());
+                .FirstOrDefault(u => u.Username == Username && u.Password == Password);
 
             if (user != null)
             {
@@ -39,23 +37,42 @@ namespace VehicleVault.Controllers
             return View();
         }
 
-        // 🔹 REGISTER GET
+        // REGISTER PAGE
         public IActionResult Register()
         {
             return View();
         }
 
-        // 🔹 REGISTER POST
+        // REGISTER POST
         [HttpPost]
-        public IActionResult Register(User u)
+        public IActionResult Register(string Username, string Password, string ConfirmPassword)
         {
-            _context.Users.Add(u);
+            if (Password != ConfirmPassword)
+            {
+                ViewBag.Error = "Passwords do not match";
+                return View();
+            }
+
+            var exists = _context.Users.Any(u => u.Username == Username);
+            if (exists)
+            {
+                ViewBag.Error = "User already exists";
+                return View();
+            }
+
+            var user = new User
+            {
+                Username = Username,
+                Password = Password
+            };
+
+            _context.Users.Add(user);
             _context.SaveChanges();
 
             return RedirectToAction("Login");
         }
 
-        // 🔹 LOGOUT
+        // LOGOUT
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();

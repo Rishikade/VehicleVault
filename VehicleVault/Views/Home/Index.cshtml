@@ -6,6 +6,29 @@
     <a href="/Home/Create">➕ Add Vehicle</a>
 </div>
 
+<form method="get" style="margin-bottom:20px; display:flex; gap:10px;">
+
+    <input type="text" name="search" value="@Context.Request.Query["search"]"
+           placeholder="Search by name..."
+           style="padding:8px; border-radius:6px; border:none;" />
+
+    <select name="fuel" style="padding:8px; border-radius:6px;">
+        <option value="">All Fuel</option>
+        <option value="Petrol">Petrol</option>
+        <option value="Electric">Electric</option>
+    </select>
+
+    <button type="submit" style="
+        padding:8px 15px;
+        background:#22c55e;
+        border:none;
+        border-radius:6px;
+        color:black;">
+        Search
+    </button>
+
+</form>
+
 <div style="display:flex; gap:20px; justify-content:center; flex-wrap:wrap;">
 
     @foreach (var v in Model)

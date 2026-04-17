@@ -5,88 +5,150 @@
     int score1 = 0;
     int score2 = 0;
 
+    // SAFE CONVERSION
+    int p1 = 0, p2 = 0, m1 = 0, m2 = 0, e1 = 0, e2 = 0;
+
     if (v1 != null && v2 != null)
     {
-        // Price (LOW better)
-        if (v1.Price < v2.Price) score1++;
-        else if (v2.Price < v1.Price) score2++;
+        int.TryParse(v1.Price.ToString(), out p1);
+        int.TryParse(v2.Price.ToString(), out p2);
 
-        // Mileage (HIGH better)
-        if (v1.Mileage > v2.Mileage) score1++;
-        else if (v2.Mileage > v1.Mileage) score2++;
+        int.TryParse(v1.Mileage.ToString(), out m1);
+        int.TryParse(v2.Mileage.ToString(), out m2);
 
-        // Engine (HIGH better - extract number)
-        int e1 = int.Parse(v1.Engine.Replace("cc", ""));
-        int e2 = int.Parse(v2.Engine.Replace("cc", ""));
+        // remove "cc"
+        int.TryParse(v1.Engine.ToString().Replace("cc", ""), out e1);
+        int.TryParse(v2.Engine.ToString().Replace("cc", ""), out e2);
 
-        if (e1 > e2) score1++;
-        else if (e2 > e1) score2++;
+        // Price
+        if (p1 < p2) score1 += 2;
+        else if (p2 < p1) score2 += 2;
+
+        // Mileage
+        if (m1 > m2) score1 += 2;
+        else if (m2 > m1) score2 += 2;
+
+        // Engine
+        if (e1 > e2) score1 += 1;
+        else if (e2 > e1) score2 += 1;
+
+        // Safety
+        if (v1.Safety != null && v1.Safety.ToLower().Contains("air")) score1 += 1;
+        if (v2.Safety != null && v2.Safety.ToLower().Contains("air")) score2 += 1;
+
+        // Tie breaker
+        if (score1 == score2)
+        {
+            if (p1 < p2) score1++;
+            else score2++;
+        }
     }
 }
 
-<h2 style="text-align:center; color:white;">⚔️ Comparison Result</h2>
+<style>
+    body {
+        background: linear-gradient(135deg,#020617,#0f172a);
+        color: white;
+        font-family: 'Segoe UI';
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        margin-top: 50px;
+    }
+
+    .card {
+        background: #1e293b;
+        padding: 25px;
+        border-radius: 15px;
+        width: 280px;
+        text-align: center;
+        transition: 0.3s;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.03);
+        }
+
+    .winner {
+        border: 2px solid #22c55e;
+        box-shadow: 0 0 30px #22c55e;
+        transform: scale(1.05);
+    }
+
+    .badge {
+        margin-top: 10px;
+        padding: 6px 12px;
+        background: #22c55e;
+        color: black;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+
+    .title {
+        text-align: center;
+        font-size: 30px;
+        margin-top: 20px;
+    }
+</style>
+
+<h2 class="title">🚗 Vehicle Comparison</h2>
 
 @if (v1 != null && v2 != null)
 {
-    <div style="display:flex; justify-content:center; gap:30px; margin-top:30px;">
+    <div class="container">
 
-        <!-- Vehicle 1 -->
-        <div style="width:250px; padding:20px; border-radius:12px;
-            background:@(score1 > score2 ? "#14532d" : "#1e293b");
-            color:white; text-align:center; box-shadow:0 0 15px rgba(0,0,0,0.5);">
-
+        <div class="card @(score1 > score2 ? "winner" : "")">
             <h3>@v1.Name</h3>
             <p>💰 ₹@v1.Price</p>
             <p>⛽ @v1.Mileage km/l</p>
             <p>⚙️ @v1.Engine</p>
             <p>🛢️ @v1.Fuel</p>
             <p>🛡️ @v1.Safety</p>
+            <p>⭐ Score: @score1</p>
 
             @if (score1 > score2)
             {
-                <p style="color:#22c55e; font-weight:bold;">🏆 Winner</p>
+                <div class="badge">🏆 Winner</div>
             }
         </div>
 
-        <!-- Vehicle 2 -->
-        <div style="width:250px; padding:20px; border-radius:12px;
-            background:@(score2 > score1 ? "#14532d" : "#1e293b");
-            color:white; text-align:center; box-shadow:0 0 15px rgba(0,0,0,0.5);">
-
+        <div class="card @(score2 > score1 ? "winner" : "")">
             <h3>@v2.Name</h3>
             <p>💰 ₹@v2.Price</p>
             <p>⛽ @v2.Mileage km/l</p>
             <p>⚙️ @v2.Engine</p>
             <p>🛢️ @v2.Fuel</p>
             <p>🛡️ @v2.Safety</p>
+            <p>⭐ Score: @score2</p>
 
             @if (score2 > score1)
             {
-                <p style="color:#22c55e; font-weight:bold;">🏆 Winner</p>
+                <div class="badge">🏆 Winner</div>
             }
         </div>
 
     </div>
 
-    <!-- RESULT TEXT -->
-    <div style="text-align:center; margin-top:30px; color:white;">
-
+    <div style="text-align:center; margin-top:30px;">
         @if (score1 > score2)
         {
-            <h3 style="color:#22c55e;">🔥 @v1.Name is Best Overall</h3>
+            <h2 style="color:#22c55e;">🏆 @v1.Name Wins</h2>
         }
         else if (score2 > score1)
         {
-            <h3 style="color:#22c55e;">🔥 @v2.Name is Best Overall</h3>
+            <h2 style="color:#22c55e;">🏆 @v2.Name Wins</h2>
         }
         else
         {
-            <h3 style="color:#facc15;">⚖️ Both are Equal</h3>
+            <h2 style="color:yellow;">🤝 It's a Tie</h2>
         }
-
     </div>
 }
 else
 {
-    <h3 style="text-align:center; color:white;">Select both vehicles 😅</h3>
+    <h3 style="text-align:center;">Select both vehicles 😅</h3>
 }

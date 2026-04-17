@@ -3,28 +3,23 @@ using VehicleVault.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services
+// Services
 builder.Services.AddControllersWithViews();
+builder.Services.AddSession();
 
-// Add DB Context
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add Session
-builder.Services.AddSession();
-
-var app = builder.Build();
+var app = builder.Build(); // ⚠️ IMPORTANT (pehle declare)
 
 // Middleware
 app.UseStaticFiles();
 app.UseRouting();
 
-// Enable Session
-app.UseSession();
+app.UseSession(); // session after routing
 
-// Default route → Login page first
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");
 
-app.Run();
+app.Run(); // last line

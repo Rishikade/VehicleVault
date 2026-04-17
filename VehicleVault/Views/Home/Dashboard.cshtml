@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<style>
+    .container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-top: 30px;
+    }
+
+    .card {
+        background: #1e293b;
+        padding: 25px;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        transition: 0.3s;
+    }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+    .title {
+        font-size: 18px;
+        color: #94a3b8;
+    }
+
+    .value {
+        font-size: 28px;
+        margin-top: 10px;
+        color: #22c55e;
+    }
+</style>
+
+<h2 style="text-align:center;">📊 Dashboard</h2>
+
+<div class="container">
+
+    <div class="card">
+        <div class="title">Total Vehicles</div>
+        <div class="value">@ViewBag.Total</div>
+    </div>
+
+    <div class="card">
+        <div class="title">Average Price</div>
+        <div class="value">₹@ViewBag.AvgPrice</div>
+    </div>
+
+    <div class="card">
+        <div class="title">Best Mileage</div>
+        <div class="value">@ViewBag.BestMileage</div>
+    </div>
+
+    <div class="card">
+        <div class="title">Electric Cars</div>
+        <div class="value">@ViewBag.ElectricCount</div>
+    </div>
+
+    <div class="card">
+        <div class="title">Petrol Cars</div>
+        <div class="value">@ViewBag.PetrolCount</div>
+    </div>
+
+</div>
