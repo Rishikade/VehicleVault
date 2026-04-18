@@ -3,31 +3,22 @@ using VehicleVault.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services
-builder.Services.AddControllersWithViews();
-
-// Database (SQLite)
+// DB
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite("Data Source=vehiclevault.db"));
 
 // Session
+builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
+
+// MVC
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// 🔥 CREATE DATABASE AUTOMATICALLY (IMPORTANT FIX)
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.EnsureCreated();
-}
-
-// Middleware
 app.UseStaticFiles();
-
 app.UseRouting();
-
-app.UseSession(); // session must be before endpoints
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",
