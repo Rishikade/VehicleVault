@@ -1,0 +1,8 @@
+Part	                |      Tool
+Backend               |	    ASP.NET Core MVC
+Database	            |     SQLite
+ORM	                  |     Entity Framework Core
+Frontend	            |     HTML, CSS, Razor
+Styling	              |     Bootstrap
+Version Control	      |     Git + GitHub
+Deployment	          |     Render
